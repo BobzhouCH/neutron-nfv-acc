@@ -17,6 +17,8 @@
 from neutron.plugins.ml2.drivers.openvswitch.agent.openflow.ovs_ofctl \
     import br_int
 from neutron.plugins.ml2.drivers.openvswitch.agent.openflow.ovs_ofctl \
+    import br_acc
+from neutron.plugins.ml2.drivers.openvswitch.agent.openflow.ovs_ofctl \
     import br_phys
 from neutron.plugins.ml2.drivers.openvswitch.agent.openflow.ovs_ofctl \
     import br_tun
@@ -32,5 +34,6 @@ def main():
         'br_int': br_int.OVSIntegrationBridge,
         'br_phys': br_phys.OVSPhysicalBridge,
         'br_tun': br_tun.OVSTunnelBridge,
+        'br_acc': br_acc.OVSIntegrationBridge,    # add by bob
     }
     ovs_neutron_agent.main(bridge_classes)

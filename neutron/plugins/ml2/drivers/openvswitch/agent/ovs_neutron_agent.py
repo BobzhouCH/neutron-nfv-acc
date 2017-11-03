@@ -148,10 +148,10 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
 
         self.fullsync = False
         # init bridge classes with configured datapath type.
-        self.br_int_cls, self.br_phys_cls, self.br_tun_cls = (
+        self.br_int_cls, self.br_phys_cls, self.br_tun_cls, self.br_acc_cls = (
             functools.partial(bridge_classes[b],
                               datapath_type=ovs_conf.datapath_type)
-            for b in ('br_int', 'br_phys', 'br_tun'))
+            for b in ('br_int', 'br_phys', 'br_tun', 'br_acc'))
 
         self.use_veth_interconnection = ovs_conf.use_veth_interconnection
         self.veth_mtu = agent_conf.veth_mtu
@@ -179,6 +179,8 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         self.int_br_device_count = 0
 
         self.int_br = self.br_int_cls(ovs_conf.integration_bridge)
+        self.acc_br = self.br_acc_cls('br-acc')  # add by bob
+
         self.setup_integration_br()
         # Stores port update notifications for processing in main rpc loop
         self.updated_ports = set()
@@ -1011,6 +1013,11 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         self.int_br.create()
         self.int_br.set_secure_mode()
         self.int_br.setup_controllers(self.conf)
+        # add by bob
+        self.acc_br.create()
+        self.acc_br.set_secure_mode()
+        self.acc_br.setup_controllers(self.conf)
+
 
         if self.conf.AGENT.drop_flows_on_start:
             # Delete the patch port between br-int and br-tun if we're deleting
@@ -1018,7 +1025,12 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
             # while flows are missing.
             self.int_br.delete_port(self.conf.OVS.int_peer_patch_port)
             self.int_br.delete_flows()
+            # add by bob
+            self.acc_br.delete_port(self.conf.OVS.int_peer_patch_port)
+            self.acc_br.delete_flows()
+
         self.int_br.setup_default_table()
+        #self.acc_br.setup_default_table()  # add by bob
 
     def setup_ancillary_bridges(self, integ_br, tun_br):
         '''Setup ancillary bridges - for example br-ex.'''
