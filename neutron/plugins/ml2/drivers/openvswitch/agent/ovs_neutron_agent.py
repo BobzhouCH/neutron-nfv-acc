@@ -1030,7 +1030,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
             self.acc_br.delete_flows()
 
         self.int_br.setup_default_table()
-        #self.acc_br.setup_default_table()  # add by bob
+        self.acc_br.setup_default_table()  # add by bob
 
     def setup_ancillary_bridges(self, integ_br, tun_br):
         '''Setup ancillary bridges - for example br-ex.'''
