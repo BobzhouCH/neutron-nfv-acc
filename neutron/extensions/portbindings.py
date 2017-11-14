@@ -96,8 +96,9 @@ VNIC_DIRECT = 'direct'
 VNIC_MACVTAP = 'macvtap'
 VNIC_BAREMETAL = 'baremetal'
 VNIC_DIRECT_PHYSICAL = 'direct-physical'
+VNIC_VIRTIO_ACC = 'virtio-acc'      # add by bob
 VNIC_TYPES = [VNIC_NORMAL, VNIC_DIRECT, VNIC_MACVTAP, VNIC_BAREMETAL,
-              VNIC_DIRECT_PHYSICAL]
+              VNIC_DIRECT_PHYSICAL, VNIC_VIRTIO_ACC]
 
 EXTENDED_ATTRIBUTES_2_0 = {
     'ports': {
